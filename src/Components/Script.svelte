@@ -46,6 +46,7 @@
       }
     };
   
+    // Need's to be optiomized
     const generateRandomBillId = () => {
       const randomCongress = Math.floor(Math.random() * 120) + 100;
       const billTypes = ['hr', 's', 'hjres', 'sjres', 'hconres', 'sconres', 'hres', 'sres'];
@@ -74,7 +75,7 @@
     afterUpdate(checkLoading);
   </script>
   
-  <div>
+  <div class="outer_layer">
     <h2>{billDetails ? billDetails.title : "Loading..."}</h2>
     {#if publicLawUrl}
       <div id="xmlContent"></div>
@@ -90,12 +91,8 @@
   </div>
   
   <style>
-    #xmlContent {
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin-top: 10px;
-      max-height: 300px;
-      overflow: auto;
+    .outer_layer{
+      display: flex;
     }
   </style>
   
