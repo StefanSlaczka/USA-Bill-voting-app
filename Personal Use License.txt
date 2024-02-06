@@ -1,0 +1,13 @@
+Stefan Slaczka's Restricted License
+
+Permission is hereby granted, upon obtaining explicit written permission from Stefan Slaczka via email at Stefan Slaczka@gmail.com, to use, copy, modify, and/or distribute this software for personal or internal business purposes only. Usage of this software by companies or organizations, whether for internal use or commercial distribution, is strictly prohibited without prior written consent from Stefan Slaczka.
+
+Stefan Slaczka disclaims all liability for any damages, including direct, indirect, incidental, special, or consequential damages arising out of the use of or inability to use the software, even if advised of the possibility of such damages.
+
+Stefan Slaczka disclaims all liability for any criminal action by the US government related to the use of this software.
+
+This software may be sold or transferred to third parties at any time. In the event of a sale or transfer, a list of GitHub users who have contributed to the software will be provided to the purchaser or investor group. These contributors may be considered for a role in the continued development or maintenance of the software at the discretion of the purchaser or investor group.
+
+By using this software, you agree to abide by the terms and conditions of this license.
+
+Stefan Slaczka reserves all rights not expressly granted to you in this license.
