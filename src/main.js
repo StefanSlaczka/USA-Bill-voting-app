@@ -1,10 +1,10 @@
-import App from './api_script.svelte'
-
-require('dotenv').config();
-console.log(process.env);
+import App from './App.svelte';
 
 const app = new App({
-  target: document.getElementById('app'),
-})
+	target: document.body,
+	props: {
+		name: 'world'
+	}
+});
 
-export default app
+export default app;
