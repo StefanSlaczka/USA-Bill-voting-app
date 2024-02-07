@@ -1,5 +1,7 @@
 <script>
     import { onMount, afterUpdate } from "svelte";
+    import Voting from "./Voting.svelte";
+    import Map from "./Map.svelte";
 
     const apiKey = process.env.API_KEY
     let congress = 117;
@@ -76,23 +78,40 @@
   </script>
   
   <div class="outer_layer">
+    <div class="inner_layer">
     <h2>{billDetails ? billDetails.title : "Loading..."}</h2>
     {#if publicLawUrl}
       <div id="xmlContent"></div>
-      <object data={publicLawUrl} title="object" type="application/pdf" width="100%" height="600px">
         <p>Error: Unable to display XML. You can view the XML <a target="_blank" href={publicLawUrl}>here</a>.</p>
-      </object>
     {/if}
     {#if error}
       <p style="color: red;">{error}</p>
     {/if}
-  
-    <button on:click={generateRandomBillId}>Generate Random Bill</button>
+  </div>
+    <Voting/>
+    <button class="random_button" on:click={generateRandomBillId}>Generate Random Bill</button>
+    <Map/>
   </div>
   
   <style>
     .outer_layer{
       display: flex;
+      justify-content: center;
+      margin-top: 1%;
+      margin-left: 1%;
+      margin-right: 1%;
+      gap: 10%;
     }
+    .inner_layer{
+      background-color: yellow;
+      font-weight: 900;
+      padding: 1%;
+    }
+    .random_button{
+      background-color: aqua;
+      width: fit-content;
+    
+    }
+
   </style>
   
