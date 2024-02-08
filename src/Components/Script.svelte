@@ -1,7 +1,7 @@
 <script>
     import { onMount, afterUpdate } from "svelte";
     import Voting from "./Voting.svelte";
-    import Map from "./Map.svelte";
+    import Map from "./USAMap.svelte";
 
     const apiKey = process.env.API_KEY
     let congress = 117;
