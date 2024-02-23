@@ -1,7 +1,5 @@
 <script>
     import { onMount, afterUpdate } from "svelte";
-    import Voting from "./Voting.svelte";
-    import Map from "./USAMap.svelte";
 
     const apiKey = process.env.API_KEY
     let congress = 117;
@@ -88,30 +86,7 @@
       <p style="color: red;">{error}</p>
     {/if}
   </div>
-    <Voting/>
     <button class="random_button" on:click={generateRandomBillId}>Generate Random Bill</button>
-    <Map/>
   </div>
   
-  <style>
-    .outer_layer{
-      display: flex;
-      justify-content: center;
-      margin-top: 1%;
-      margin-left: 1%;
-      margin-right: 1%;
-      gap: 10%;
-    }
-    .inner_layer{
-      background-color: yellow;
-      font-weight: 900;
-      padding: 1%;
-    }
-    .random_button{
-      background-color: aqua;
-      width: fit-content;
-    
-    }
-
-  </style>
   
