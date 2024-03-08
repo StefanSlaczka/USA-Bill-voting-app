@@ -29,44 +29,31 @@
   };
 
   const handlePush = () => {
-      if (stateInput.trim() !== '' && !hasVoted) {
-          const stateName = stateInput.trim().toLowerCase();
-          const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
-          if (stateIndex !== -1) {
-              statesData.features[stateIndex].properties.density = 'push';
-              pushCount++;
-              hasVoted = true;
-              showButtons.set(false);
-              showResetButton.set(true); // Show Reset Vote button after voting
-          }
-      }
-  };
+    if (stateInput.trim() !== '' && !hasVoted) {
+        const stateName = stateInput.trim().toLowerCase();
+        const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
+        if (stateIndex !== -1) {
+            statesData.features[stateIndex].properties.push++; // Increment push count
+            hasVoted = true;
+            showButtons.set(false);
+            showResetButton.set(true); // Show Reset Vote button after voting
+        }
+    }
+};
 
-  const handlePass = () => {
-      if (stateInput.trim() !== '' && !hasVoted) {
-          const stateName = stateInput.trim().toLowerCase();
-          const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
-          if (stateIndex !== -1) {
-              statesData.features[stateIndex].properties.density = 'pass';
-              passCount++;
-              hasVoted = true;
-              showButtons.set(false);
-              showResetButton.set(true); // Show Reset Vote button after voting
-          }
-      }
-  };
+const handlePass = () => {
+    if (stateInput.trim() !== '' && !hasVoted) {
+        const stateName = stateInput.trim().toLowerCase();
+        const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
+        if (stateIndex !== -1) {
+            statesData.features[stateIndex].properties.pass++; // Increment pass count
+            hasVoted = true;
+            showButtons.set(false);
+            showResetButton.set(true); // Show Reset Vote button after voting
+        }
+    }
+};
 
-  const handleResetVote = () => {
-      hasVoted = false; // Reset hasVoted to allow voting again
-      showResetButton.set(false); // Hide Reset Vote button
-      pushCount = 0; // Reset pushCount
-      passCount = 0; // Reset passCount
-      // Reset density values to default
-      statesData.features.forEach(feature => {
-          feature.properties.density = feature.properties.name; // Replace with default density value
-      });
-      showButtons.set(true); // Show buttons to vote again
-  };
 </script>
   
   <div class="outer_layer">
@@ -77,13 +64,7 @@
     {#if $showButtons}
       <button class="Pass" on:click={handlePass} disabled={stateInput.trim() === ''}>Pass</button>
       <button class="Push" on:click={handlePush} disabled={stateInput.trim() === ''}>Push</button>
-    {/if}
-  
-    <!-- Show Reset Vote button only when showResetButton is true -->
-    {#if $showResetButton}
-      <button on:click={handleResetVote}>Reset Vote</button>
-    {/if}
-  
+    {/if}  
     <p>Push Count: {pushCount}</p>
     <p>Pass Count: {passCount}</p>
   </div>

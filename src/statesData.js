@@ -1382,7 +1382,7 @@ var statesData = {
     {
       type: "Feature",
       id: "06",
-      properties: { name: "California", push: 10, pass: 5 },
+      properties: { name: "California", push: 0, pass: 0 },
       geometry: {
         type: "Polygon",
         coordinates: [
