@@ -26,20 +26,27 @@
     });
   }
 
-  function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
-  }
+  function getColor(push, pass) {
+    if (push > pass) {
+        // More pushes, so more green
+        return push > 1000 ? '#005a32' :
+               push > 500  ? '#238b45' :
+               push > 200  ? '#41ab5d' :
+               push > 100  ? '#74c476' :
+                             '#a1d99b';
+    } else {
+        // More passes, so more red
+        return pass > 1000 ? '#800026' :
+               pass > 500  ? '#BD0026' :
+               pass > 200  ? '#E31A1C' :
+               pass > 100  ? '#FC4E2A' :
+                             '#FD8D3C';
+    }
+}
 
   function style(feature) {
     return {
-      fillColor: getColor(feature.properties.density),
+      fillColor: getColor(feature.properties.push, feature.properties.pass),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -81,7 +88,7 @@
     info = {
       update: function(props) {
         if (props) {
-          this._div.innerHTML = '<h4>US Population Density</h4>' + props.name + ' : ' + props.density + ' people / mi<sup>2</sup>';
+          this._div.innerHTML = '<h4>US Population Density</h4>' + props.name + ' : Push - ' + props.push + ', Pass - ' + props.pass;
         } else {
           this._div.innerHTML = '<h4>US Population Density</h4>Hover over a state';
         }
@@ -122,4 +129,4 @@
   }
 </style>
 
-<div id="map"  style="height: 600px;"></div>
+<div id="map" style="height: 600px;"></div>
