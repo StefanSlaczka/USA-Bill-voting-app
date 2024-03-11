@@ -1,7 +1,7 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
 
-  const apiKey = process.env.API_KEY
+  const apiKey = process.env.API_KEY;
   let congress = 117;
   let billType = 'hr';
   let billNumber = 3076;
@@ -11,6 +11,8 @@
   let publicLawUrl = null;
   let error = null;
   let buttonDisabled = false;
+  const maxAttempts = 100;
+  let attemptCount = 0;
 
   const fetchBillData = async () => {
     try {
@@ -34,8 +36,9 @@
         // Find the XML URL for the "Public Law" type
         const publicLawVersion = textData.textVersions.find(version => version.type === "Public Law");
         
-        if (publicLawVersion) {
-          publicLawUrl = publicLawVersion.formats.find(format => format.type === "Formatted XML").url;
+        if (publicLawVersion && publicLawVersion.formats) {
+          const formattedXML = publicLawVersion.formats.find(format => format.type === "Formatted XML");
+          publicLawUrl = formattedXML ? formattedXML.url : null;
         } else {
           // If "Public Law" version not found, get the newest version
           const newestVersion = textData.textVersions.reduce((prev, current) => (prev.date > current.date) ? prev : current);
@@ -52,8 +55,11 @@
   };
 
   const generateRandomBillId = async () => {
-    buttonDisabled = true; // Disable the button
-    // Fetch bill data
+  buttonDisabled = true; // Disable the button
+  attemptCount = 0;
+
+  while (attemptCount < maxAttempts) {
+    // Generate random bill data
     congress = Math.floor(Math.random() * 120) + 100;
     const billTypes = ['hr', 's', 'hjres', 'sjres', 'hconres', 'sconres', 'hres', 'sres'];
     billType = billTypes[Math.floor(Math.random() * billTypes.length)];
@@ -64,21 +70,26 @@
 
     await fetchBillData();
 
-    // Re-enable the button after fetching data
-    buttonDisabled = false; 
-  };
+    // Check if billDetails is not null and contains valid data
+    if (billDetails) {
+      // If bill found and billDetails is not null, exit the loop
+      break;
+    }
+
+    attemptCount++;
+  }
+
+  // Re-enable the button after fetching data
+  buttonDisabled = false;
+};
 
   onMount(fetchBillData);
 
   const checkLoading = async () => {
-    const maxRetries = 10; // Maximum number of retries
-    let retries = 0;
-
-    // Check loading status until it's not "Loading..." or maxRetries is reached
-    while (billDetails && billDetails.title === "Loading..." && retries < maxRetries) {
+    // Check loading status until it's not "Loading..."
+    while (billDetails && billDetails.title === "Loading...") {
       await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second before checking again
       await generateRandomBillId();
-      retries++;
     }
   };
 
@@ -96,6 +107,5 @@
     <p style="color: red;">{error}</p>
     {/if}
   </div>
-  <button class="random_button" on:click={generateRandomBillId
-} disabled={buttonDisabled}>Generate Random Bill</button>
+  <button class="random_button" on:click={generateRandomBillId} disabled={buttonDisabled}>Generate Random Bill</button>
 </div>
