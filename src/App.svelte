@@ -4,6 +4,7 @@
   import Navbar from './Components/Navbar.svelte';
   import Voting from './Components/Voting.svelte';
   import UsaMap from './Components/USAMap.svelte';
+  import statesData from './statesData.js'; // Import the states data
 
   let username = '';
   let password = '';
@@ -29,6 +30,20 @@
   });
 
   const handleLogin = () => {
+    // Validate the state input
+    if (state !== '') {
+      const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
+      if (validState) {
+        console.log(state);
+      } else {
+        alert('Invalid state. Please enter a valid state name.');
+        return; // Prevent login if the state is invalid
+      }
+    } else {
+      alert('Please enter a state name.');
+      return; // Prevent login if the state is empty
+    }
+
     // Perform login logic here
     console.log('Logging in with:', username, password, state);
     handleSuccessfulLogin(); // Assuming login is successful
@@ -36,8 +51,22 @@
   
   const handleSignup = () => {
     // Perform signup logic here
-    console.log('Signing up with:', username, password, state);
-    handleSuccessfulLogin(); // Assuming signup is successful
+    if (state !== '') {
+      const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
+      if (validState) {
+        console.log(state);
+      } else {
+        alert('Invalid state. Please enter a valid state name.');
+        return; // Prevent login if the state is invalid
+      }
+    } else {
+      alert('Please enter a state name.');
+      return; // Prevent login if the state is empty
+    }
+
+    // Perform login logic here
+    console.log('Logging in with:', username, password, state);
+    handleSuccessfulLogin(); // Assuming login is successful
   };
   
   const toggleMode = () => {
@@ -59,8 +88,9 @@
 
     <!-- Conditional rendering of content -->
     {#if showContent}
-      <Voting/>
-      <UsaMap/>
+    <Voting state={state} />
+
+    <UsaMap/>
     {/if}
   </Router>
 </div>

@@ -3,7 +3,6 @@
   import statesData from '../statesData.js';
   import { onMount, afterUpdate } from "svelte";
 
-  let stateInput = '';
   let pushCount = 0;
   let passCount = 0;
   let hasVoted = false;
@@ -24,6 +23,8 @@
   const maxAttempts = 100;
   let attemptCount = 0;
 
+  export let state;
+  
   const fetchBillData = async () => {
     try {
       console.log('Fetching data with URL:', apiUrl);
@@ -106,28 +107,10 @@
   onMount(fetchBillData);
   afterUpdate(checkLoading);
 
-  const handleSearch = () => {
-    const stateName = stateInput.trim();
-    if (stateName !== '') {
-      const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === stateName.toLowerCase());
-      if (validState) {
-        console.log(stateName);
-        if (!hasVoted) {
-          showButtons.set(true);
-        }
-      } else {
-        alert('Invalid state. Please enter a valid state name.');
-        showButtons.set(false);
-      }
-    } else {
-      alert('Please enter a state name.');
-      showButtons.set(false);
-    }
-  };
 
   const handlePush = () => {
-    if (stateInput.trim() !== '' && !hasVoted) {
-      const stateName = stateInput.trim().toLowerCase();
+    if (state.trim() !== '' && !hasVoted) {
+      const stateName = state.trim().toLowerCase();
       const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
       if (stateIndex !== -1) {
         statesData.features[stateIndex].properties.push++; // Increment push count
@@ -141,8 +124,8 @@
   };
 
   const handlePass = () => {
-    if (stateInput.trim() !== '' && !hasVoted) {
-      const stateName = stateInput.trim().toLowerCase();
+    if (state.trim() !== '' && !hasVoted) {
+      const stateName = state.trim().toLowerCase();
       const stateIndex = statesData.features.findIndex(feature => feature.properties.name.toLowerCase() === stateName);
       if (stateIndex !== -1) {
         statesData.features[stateIndex].properties.pass++; // Increment pass count
@@ -185,14 +168,9 @@
 </div>
 
 <div class="outer_layer">
-  <input bind:value={stateInput} placeholder="Enter your state for the vote" />
-  <button on:click={handleSearch}>Search</button>
-
   <!-- Show the buttons only when showButtons is true -->
-  {#if $showButtons}
-    <button class="Pass" on:click={handlePass} disabled={stateInput.trim() === ''}>Pass</button>
-    <button class="Push" on:click={handlePush} disabled={stateInput.trim() === ''}>Push</button>
-  {/if}
+    <button class="Pass" on:click={handlePass} disabled={state.trim() === ''}>Pass</button>
+    <button class="Push" on:click={handlePush} disabled={state.trim() === ''}>Push</button>
 
   {#if $voteMessage}
     <p>{$voteMessage}</p>
