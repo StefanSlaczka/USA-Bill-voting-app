@@ -26,7 +26,7 @@
 
   const fetchBillData = async () => {
     try {
-      console.log('Fetching data with URL:', apiUrl); // Log the details URL
+      console.log('Fetching data with URL:', apiUrl);
       const detailsResponse = await fetch(apiUrl);
 
       if (detailsResponse.status === 404) {

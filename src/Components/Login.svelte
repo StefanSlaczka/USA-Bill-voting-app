@@ -7,7 +7,7 @@
   
   const handleLogin = () => {
     // Perform login logic here
-    console.log('Logging in with:', username, password);
+    console.log('Logging in with:', username, password, state);
     isLoggedIn = true;
   };
   
@@ -44,6 +44,11 @@
       <label>
         Password:
         <input type="password" bind:value={password} />
+      </label>
+      <!--Will get rid when it has a DB-->
+      <label>
+        State:
+        <input type="text" bind:value={state} />
       </label>
     
       <button type="button" on:click={handleLogin}>Login</button>
