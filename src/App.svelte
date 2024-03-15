@@ -88,6 +88,8 @@
 
     <!-- Conditional rendering of content -->
     {#if showContent}
+    <h2>Welcome, {username}!</h2>
+  <button type="button" on:click={handleLogout}>Sign Out</button>
     <Voting state={state} />
 
     <UsaMap/>
