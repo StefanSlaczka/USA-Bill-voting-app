@@ -153,53 +153,97 @@
 
 </script>
 
-<div class="outer_layer">
-  <div class="inner_layer">
-    <h2>{billDetails ? billDetails.title : "Loading..."}</h2>
-    {#if publicLawUrl}
-    <div id="xmlContent"></div>
-    <p>Error: Unable to display XML. You can view the XML <a target="_blank" href={publicLawUrl}>here</a>.</p>
-    {/if}
-    {#if error}
-    <p style="color: red;">{error}</p>
-    {/if}
+<div class="container">
+  <div class="left-section">
+    <div class="outer_layer">
+      <div class="inner_layer">
+        <h2>{billDetails ? billDetails.title : "Loading..."}</h2>
+        {#if publicLawUrl}
+        <div id="xmlContent"></div>
+        <p>Error: Unable to display XML. You can view the XML <a target="_blank" href={publicLawUrl}>here</a>.</p>
+        {/if}
+        {#if error}
+        <p style="color: red;">{error}</p>
+        {/if}
+      </div>
+      <button class="random_button" on:click={generateRandomBillId} disabled={buttonDisabled}>Generate Random Bill</button>
+    </div>
   </div>
-  <button class="random_button" on:click={generateRandomBillId} disabled={buttonDisabled}>Generate Random Bill</button>
-</div>
 
-<div class="outer_layer">
-  <!-- Show the buttons only when showButtons is true -->
-    <button class="Pass" on:click={handlePass} disabled={state.trim() === ''}>Pass</button>
-    <button class="Push" on:click={handlePush} disabled={state.trim() === ''}>Push</button>
-
-  {#if $voteMessage}
-    <p>{$voteMessage}</p>
-  {/if}
-
-  <p>Push Count: {pushCount}</p>
-  <p>Pass Count: {passCount}</p>
+  <div class="right-section">
+    <div class="outer_layer">
+      {#if $voteMessage}
+      <p>{$voteMessage}</p>
+      {/if}
+      <div class="button-container">
+        <button class="Pass" style="background-color: red;" on:click={handlePass} disabled={state.trim() === ''}>Pass</button>
+        <p>Pass Count: {passCount}</p>
+      </div>
+      
+      <div class="button-container">
+        <button class="Push" style="background-color: green;"  on:click={handlePush} disabled={state.trim() === ''}>Push</button>
+        <p>Push Count: {pushCount}</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
-  .outer_layer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10%;
-  }
+.container {
+  display: flex;
+  justify-content: space-between;
+}
 
-  button {
-    height: 100%;
-    font-size: 180%;
-    border-radius: 30%;
-  }
+.left-section,
+.right-section {
+  flex: 1;
+}
 
-  .Pass {
-    background-color: rgb(255, 45, 45);
-  }
+.outer_layer {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
 
-  .Push {
-    background-color: rgb(4, 255, 4);
-  }
+.button-container {
+  display: inline-block;
+  margin-right: 20px; /* Adjust the margin between buttons and counts */
+}
+
+.inner_layer {
+  margin-bottom: 10px;
+}
+
+.random_button {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.random_button:hover {
+  background-color: #0056b3;
+}
+
+.Pass,
+.Push {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.Pass:hover,
+.Push:hover {
+  background-color: #0056b3;
+}
 </style>

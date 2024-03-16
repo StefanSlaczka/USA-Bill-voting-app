@@ -1,6 +1,7 @@
 <!-- Navbar.svelte -->
 <script>
   import { Link } from "svelte-routing";
+  import About from "./About.svelte";
 </script>
 
 <div>
@@ -12,15 +13,9 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <Link to="/" class="navbar-item">Home</Link>
-          <Link to="/about" class="navbar-item">About</Link>
-          <!-- Add more navbar items as needed -->
-        </div>
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <Link to="/login" class="button">Login</Link>
+          <button>
+            <Link to="/about" class="navbar-item">About</Link>
           </div>
-        </div>
       </div>
     </div>
   </nav>

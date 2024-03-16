@@ -4,6 +4,7 @@
   import Navbar from './Components/Navbar.svelte';
   import Voting from './Components/Voting.svelte';
   import UsaMap from './Components/USAMap.svelte';
+  import About from './Components/About.svelte';
   import statesData from './statesData.js'; // Import the states data
 
   let username = '';
@@ -85,14 +86,15 @@
   <Router>
     <!-- Navbar always displayed -->
     <Navbar/>
+    <Route path="/about" component={About} />
 
     <!-- Conditional rendering of content -->
     {#if showContent}
     <h2>Welcome, {username}!</h2>
-  <button type="button" on:click={handleLogout}>Sign Out</button>
-    <Voting state={state} />
+      <button type="button" on:click={handleLogout}>Sign Out</button>
+      <Voting state={state} />
 
-    <UsaMap/>
+      <UsaMap/>
     {/if}
   </Router>
 </div>
@@ -100,48 +102,112 @@
 {#if showContent}
   <h2>Welcome, {username}!</h2>
   <button type="button" on:click={handleLogout}>Sign Out</button>
-{:else}
+  {:else}
   {#if isLogin}
-    <h2>Login</h2>
-    <form on:submit|preventDefault>
-      <label>
+    <h2 class="form-title">Login</h2>
+    <form class="login-form" on:submit|preventDefault>
+      <label class="form-label">
         Username:
-        <input type="text" bind:value={username} />
+        <input class="form-input" type="text" bind:value={username} />
       </label>
     
-      <label>
+      <label class="form-label">
         Password:
-        <input type="password" bind:value={password} />
+        <input class="form-input" type="password" bind:value={password} />
       </label>
       
-      <label>
+      <label class="form-label">
         State:
-        <input type="text" bind:value={state} />
+        <input class="form-input" type="text" bind:value={state} />
       </label>
     
-      <button type="button" on:click={handleLogin}>Login</button>
+      <button class="form-button" type="button" on:click={handleLogin}>Login</button>
       <p>Don't have an account? Sign up <a href="#/" on:click|preventDefault={toggleMode}>here</a>.</p>
     </form>
   {:else}
-    <h2>Sign Up</h2>
-    <form on:submit|preventDefault>
-      <label>
+    <h2 class="form-title">Sign Up</h2>
+    <form class="signup-form" on:submit|preventDefault>
+      <label class="form-label">
         Username:
-        <input type="text" bind:value={username} />
+        <input class="form-input" type="text" bind:value={username} />
       </label>
     
-      <label>
+      <label class="form-label">
         Password:
-        <input type="password" bind:value={password} />
+        <input class="form-input" type="password" bind:value={password} />
       </label>
     
-      <label>
+      <label class="form-label">
         State:
-        <input type="text" bind:value={state} />
+        <input class="form-input" type="text" bind:value={state} />
       </label>
     
-      <button type="button" on:click={handleSignup}>Sign Up</button>
+      <button class="form-button" type="button" on:click={handleSignup}>Sign Up</button>
       <p>Already have an account? Login <a href="#/" on:click|preventDefault={toggleMode}>here</a>.</p>
     </form>
   {/if}
 {/if}
+
+
+<style>
+/* Styles for login/sign-up forms */
+.login-form,
+.signup-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center; /* Center align the text */
+}
+
+.form-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center; /* Center align the text */
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.form-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.form-p {
+  margin-top: 10px;
+}
+
+.form-a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.form-a:hover {
+  text-decoration: underline;
+}
+
+</style>
