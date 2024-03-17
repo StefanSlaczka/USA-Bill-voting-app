@@ -200,11 +200,11 @@
 }
 
 .outer_layer {
-  margin-bottom: 20px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  height: auto;
 }
 
 .button-container {

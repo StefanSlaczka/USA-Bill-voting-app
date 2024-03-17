@@ -99,10 +99,7 @@
   </Router>
 </div>
 
-{#if showContent}
-  <h2>Welcome, {username}!</h2>
-  <button type="button" on:click={handleLogout}>Sign Out</button>
-  {:else}
+{#if !showContent}
   {#if isLogin}
     <h2 class="form-title">Login</h2>
     <form class="login-form" on:submit|preventDefault>
