@@ -3,6 +3,8 @@
   import statesData from '../statesData.js';
   import { onMount, afterUpdate } from "svelte";
 
+  import {urls} from "./Data/API_links.js"
+
   let pushCount = 0;
   let passCount = 0;
   let hasVoted = false;
@@ -16,15 +18,16 @@
   let billNumber = 3076;
   let apiUrl = `https://api.congress.gov/v3/bill/${congress}/${billType}/${billNumber}?api_key=${apiKey}`;
   let textUrl = `https://api.congress.gov/v3/bill/${congress}/${billType}/${billNumber}/text?api_key=${apiKey}&format=json`;
-  let billDetails = null;
   let publicLawUrl = null;
-  let error = null;
+  //let billDetails = null;
+  //let error = null;
   let buttonDisabled = false;
   const maxAttempts = 100;
   let attemptCount = 0;
 
   export let state;
   
+  /*
   const fetchBillData = async () => {
     try {
       console.log('Fetching data with URL:', apiUrl);
@@ -95,6 +98,52 @@
     // Re-enable the button after fetching data
     buttonDisabled = false;
   };
+  */
+
+  const fetchRandomBillData = async (urls) => {
+  try {
+    const randomIndex = Math.floor(Math.random() * urls.length);
+    const apiUrl = urls[randomIndex];
+
+    const detailsResponse = await fetch(apiUrl);
+
+    if (detailsResponse.status === 404) {
+      return { error: 'Bill not found' };
+    }
+
+    const detailsData = await detailsResponse.json();
+    const billDetails = detailsData.bill;
+
+    // Constructing the text URL
+    const textUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
+
+    return { billDetails, textUrl }; // Include textUrl in the returned object
+  } catch (error) {
+    console.error('Error:', error);
+    return { error: 'An error occurred while fetching data.' };
+  }
+};
+
+
+  let billDetails = null;
+  let error = null;
+
+  const generateRandomBillId = async () => {
+    try {
+      const { billDetails: fetchedBillDetails, error: fetchError } = await fetchRandomBillData(urls);
+      
+      if (fetchError) {
+        error = fetchError;
+        return;
+      }
+
+      billDetails = fetchedBillDetails;
+      error = null;
+    } catch (error) {
+      console.error('Error:', error);
+      error = 'An error occurred while generating random bill ID.';
+    }
+  };
 
   const checkLoading = async () => {
     // Check loading status until it's not "Loading..."
@@ -103,8 +152,8 @@
       await generateRandomBillId();
     }
   };
-
-  onMount(fetchBillData);
+  onMount(generateRandomBillId);
+  //onMount(fetchBillData);
   afterUpdate(checkLoading);
 
 

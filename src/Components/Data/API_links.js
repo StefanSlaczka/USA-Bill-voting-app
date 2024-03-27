@@ -1,6 +1,6 @@
-const apiKey = process.env.API_KEY;
+export const apiKey = process.env.API_KEY;
 
-const urls = [
+export const urls = [
     `https://api.congress.gov/v3/bill/117/hr/3076?api_key=${apiKey}`,
     `https://api.congress.gov/v3/bill/100/sjres/114?api_key=${apiKey}`,
     `https://api.congress.gov/v3/bill/102/hconres/95?api_key=${apiKey}`,
