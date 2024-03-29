@@ -19,8 +19,8 @@
   let apiUrl = `https://api.congress.gov/v3/bill/${congress}/${billType}/${billNumber}?api_key=${apiKey}`;
   let textUrl = `https://api.congress.gov/v3/bill/${congress}/${billType}/${billNumber}/text?api_key=${apiKey}&format=json`;
   let publicLawUrl = null;
-  //let billDetails = null;
-  //let error = null;
+  let billDetails = null;
+  let error = null;
   let buttonDisabled = false;
   const maxAttempts = 100;
   let attemptCount = 0;
@@ -146,10 +146,6 @@
     return { error: 'An error occurred while fetching data.' };
   }
 };
-
-
-  let billDetails = null;
-  let error = null;
 
   const generateRandomBillId = async () => {
     try {
