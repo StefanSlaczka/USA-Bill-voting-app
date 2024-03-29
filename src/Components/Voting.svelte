@@ -105,7 +105,11 @@
     const randomIndex = Math.floor(Math.random() * urls.length);
     const apiUrl = urls[randomIndex];
 
-    const detailsResponse = await fetch(apiUrl);
+    // Constructing the text URL
+    const titleUrl = `${apiUrl}?api_key=${apiKey}`;
+    const textUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
+
+    const detailsResponse = await fetch(titleUrl);
 
     if (detailsResponse.status === 404) {
       return { error: 'Bill not found' };
@@ -113,9 +117,6 @@
 
     const detailsData = await detailsResponse.json();
     const billDetails = detailsData.bill;
-
-    // Constructing the text URL
-    const textUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
 
     return { billDetails, textUrl }; // Include textUrl in the returned object
   } catch (error) {
