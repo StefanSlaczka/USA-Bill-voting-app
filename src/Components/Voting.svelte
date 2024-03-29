@@ -107,7 +107,10 @@
 
     // Constructing the text URL
     const titleUrl = `${apiUrl}?api_key=${apiKey}`;
-    const textUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
+    const publicLawUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
+
+    console.log("titleUrl ", titleUrl)
+    console.log("publicLawUrl ",publicLawUrl)
 
     const detailsResponse = await fetch(titleUrl);
 
@@ -117,8 +120,9 @@
 
     const detailsData = await detailsResponse.json();
     const billDetails = detailsData.bill;
+    
 
-    return { billDetails, textUrl }; // Include textUrl in the returned object
+    return { billDetails, publicLawUrl }; // Include textUrl in the returned object
   } catch (error) {
     console.error('Error:', error);
     return { error: 'An error occurred while fetching data.' };
