@@ -107,10 +107,10 @@
 
     // Constructing the text URL
     const titleUrl = `${apiUrl}?api_key=${apiKey}`;
-    const publicLawUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
+    const textUrl = `${apiUrl}/text?api_key=${apiKey}&format=json`;
 
     console.log("titleUrl ", titleUrl)
-    console.log("publicLawUrl ",publicLawUrl)
+    console.log("textUrl ",textUrl)
 
     const detailsResponse = await fetch(titleUrl);
 
@@ -121,6 +121,24 @@
     const detailsData = await detailsResponse.json();
     const billDetails = detailsData.bill;
     
+    const textResponse = await fetch(textUrl);
+    const textData = await textResponse.json();
+
+    if (textData && textData.textVersions && textData.textVersions.length > 0) {
+        // Find the XML URL for the "Public Law" type
+        const publicLawVersion = textData.textVersions.find(version => version.type === "Public Law");
+        
+        if (publicLawVersion && publicLawVersion.formats) {
+          const formattedXML = publicLawVersion.formats.find(format => format.type === "Formatted XML");
+          publicLawUrl = formattedXML ? formattedXML.url : null;
+        } else {
+          // If "Public Law" version not found, get the newest version
+          const newestVersion = textData.textVersions.reduce((prev, current) => (prev.date > current.date) ? prev : current);
+          publicLawUrl = newestVersion ? newestVersion.formats.find(format => format.type === "Formatted XML").url : null;
+        }
+      } else {
+        error = 'Text versions not found or empty';
+    }
 
     return { billDetails, publicLawUrl }; // Include textUrl in the returned object
   } catch (error) {
