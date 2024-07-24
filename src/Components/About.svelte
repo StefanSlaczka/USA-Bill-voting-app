@@ -1,9 +1,6 @@
-<script>
-    export let name;
-  </script>
   
   <div>
-    <h1>About {{ name }}</h1>
+    <h1>About Voting Bill App</h1>
     <p>This is the About page of the Voting Bill App.</p>
     <p>You can add any additional information about your app here.</p>
   </div>

@@ -55,8 +55,6 @@
           const newestVersion = textData.textVersions.reduce((prev, current) => (prev.date > current.date) ? prev : current);
           publicLawUrl = newestVersion ? newestVersion.formats.find(format => format.type === "Formatted XML").url : null;
         }
-      } else {
-        error = 'Text versions not found or empty';
       }
     } catch (error) {
       console.error('Error:', error);
