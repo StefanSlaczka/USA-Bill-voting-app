@@ -198,14 +198,14 @@
   padding: 10px;
   border: none;
   border-radius: 3px;
-  background-color: #007bff;
+  background-color: #E74C3C;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
 }
 
 .form-button:hover {
-  background-color: #0056b3;
+  background-color: #eeb2ab;
 }
 
 .form-p {

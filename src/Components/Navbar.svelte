@@ -13,8 +13,9 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <button>
-            <Link to="/about" class="navbar-item">About</Link>
+          
+            <Link to="/about" class="navbar-item"><button class="button">About</button></Link>
+            
           </div>
       </div>
     </div>
@@ -67,8 +68,7 @@
 
   /* Style for the login button */
   .button {
-    background-color: #007bff;
-    color: white;
+    background-color: #E74C3C;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
