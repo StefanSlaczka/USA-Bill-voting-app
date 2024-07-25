@@ -1,47 +1,91 @@
-# Svelte + Vite
+# Bill Voting App
 
-This template should help get you started developing with Svelte in Vite.
+## Overview
 
-## Recommended IDE Setup
+This project aims to revolutionize citizen engagement by replacing Congress Interlay with a user-friendly platform for voting on proposed bills. It empowers individuals to directly influence the legislative process by casting their votes for bills they want to see implemented. Users can:
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+* Generate 20 random bills for review.
+* Vote for each bill once to express their opinion.
+* View aggregated vote counts by state to gain insights into public sentiment.
+* Securely log in to ensure one vote per user.
 
-## Need an official Svelte framework?
+## Technologies Used
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+**Front-end:**
 
-## Technical considerations
+* Svelte (reactive JavaScript framework)
+* JavaScript
+* HTML
+* CSS
 
-**Why use this over SvelteKit?**
+**Back-end:**
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+* Node.js (JavaScript runtime environment)
+* Express.js (web framework for Node.js)
+* Python (optional, for database setup)
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+**Database:**
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+* SQLite (lightweight relational database)
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+**Other Libraries:**
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+* Leaflet.css (mapping library for visualizing state-based vote counts)
 
-**Why include `.vscode/extensions.json`?**
+## Getting Started
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+**Front-end Setup:**
 
-**Why enable `checkJs` in the JS template?**
+1. Navigate to the front-end directory.
+2. Install dependencies:
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+   ```bash
+   npm install
 
-**Why is HMR not preserving my local component state?**
+3. Start the development server
+   ```bash
+    npm run dev
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+**back-end Setup:**
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+1. Navigate to the back-end directory.
+
+
+2. Install dependencies:
+   ```bash
+    npm insall
+
+3. Start the development server
+   ```bash
+    node index.js
+
+**database-end Setup:**
+
+1. Navigate to the Data directory in back-end directory.
+
+2. Initialize the database
+   ```bash
+    python setup_database.py
+
+# About This Project
+
+This project fosters citizen participation by providing a platform for individuals to:
+
+- **Generate Random Bills:** Explore a variety of proposed laws.
+- **Cast Informed Votes:** Express their opinions on bills.
+- **Securely Log In:** Ensure a fair and accountable voting process.
+- **View Vote Counts:** Gain insights into public opinion across states.
+
+This app promotes transparency and encourages citizens to actively engage in the legislative process.
+
+## License
+
+This project is licensed under the MIT License. Please refer to the LICENSE file for details.
+
+## Acknowledgments
+
+- **Svelte:** For a performant and intuitive front-end experience.
+- **Node.js and Express.js:** For a robust and scalable back-end.
+- **SQLite:** For its efficient database management capabilities.
+- **Python:** For streamlining database setup (if applicable).
