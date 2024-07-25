@@ -75,6 +75,25 @@ app.post('/signup', (req, res) => {
   });
 });
 
+// Endpoint to login a user
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if the username and password match
+  db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, row) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    if (!row) {
+      return res.status(400).send('Invalid username or password');
+    }
+
+    // If login is successful, send the user data
+    res.status(200).send({ id: row.id, username: row.username, state: row.state });
+  });
+});
+
+
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });

@@ -27,24 +27,33 @@
   });
 
   const handleLogin = async () => {
-    // Validate the state input
-    if (state !== '') {
-      const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
-      if (validState) {
-        console.log(state);
-      } else {
-        alert('Invalid state. Please enter a valid state name.');
-        return;
-      }
-    } else {
-      alert('Please enter a state name.');
-      return;
+  // Perform login logic here
+  try {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
     }
 
-    // Perform login logic here
-    console.log('Logging in with:', username, password, state);
+    const result = await response.json();
+    console.log('User logged in:', result);
+    state = result.state; // Set the state to the user's state
     handleSuccessfulLogin();
-  };
+  } catch (error) {
+    alert(`Login failed: ${error.message}`);
+  }
+};
+
 
   const handleSignup = async () => {
   // Validate the state input
@@ -126,10 +135,6 @@
       <label class="form-label">
         Password:
         <input class="form-input" type="password" bind:value={password} />
-      </label>
-      <label class="form-label">
-        State:
-        <input class="form-input" type="text" bind:value={state} />
       </label>
       <button class="form-button" type="button" on:click={handleLogin}>Login</button>
       <p>Don't have an account? Sign up <a href="#/" on:click|preventDefault={toggleMode}>here</a>.</p>
