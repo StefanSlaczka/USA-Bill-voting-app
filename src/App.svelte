@@ -47,43 +47,47 @@
   };
 
   const handleSignup = async () => {
-    // Validate the state input
-    if (state !== '') {
-      const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
-      if (validState) {
-        console.log(state);
-      } else {
-        alert('Invalid state. Please enter a valid state name.');
-        return;
-      }
+  // Validate the state input
+  if (state !== '') {
+    const validState = statesData.features.find(
+      feature => feature.properties.name.toLowerCase() === state.toLowerCase()
+    );
+    if (validState) {
+      console.log(state);
     } else {
-      alert('Please enter a state name.');
-      return;
+      alert('Invalid state. Please enter a valid state name.');
+      return; // Prevent login if the state is invalid
+    }
+  } else {
+    alert('Please enter a state name.');
+    return; // Prevent login if the state is empty
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        state,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
     }
 
-    // Perform signup logic here
-    try {
-      const response = await fetch('http://localhost:5000/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password, state })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('User signed up with ID:', data.id);
-        handleSuccessfulLogin();
-      } else {
-        const errorData = await response.json();
-        // @ts-ignore
-        alert('Error during sign up:', errorData.error);
-      }
-    } catch (error) {
-      console.error('Error during sign up:', error);
-    }
-  };
+    const result = await response.json();
+    console.log('User signed up with ID:', result.id);
+    handleSuccessfulLogin(); // Assuming login is successful
+  } catch (error) {
+    alert(`Sign up failed: ${error.message}`);
+  }
+};
 
   const toggleMode = () => {
     isLogin = !isLogin;
