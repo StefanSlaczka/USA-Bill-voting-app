@@ -13,24 +13,20 @@
   let isLogin = true; // Determines whether the user is in the login or signup mode
   let showContent = false; // Determines whether to show the content or login form
 
-  // Function to handle login button click
   const handleLoginButtonClick = () => {
     showContent = true;
-    // Redirect to the login page
     navigate('/login');
   };
 
-  // Function to handle successful login
   const handleSuccessfulLogin = () => {
     showContent = true;
   };
 
-  // Automatically scroll to the top of the page when the component mounts
   onMount(() => {
     window.scrollTo(0, 0);
   });
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Validate the state input
     if (state !== '') {
       const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
@@ -38,38 +34,57 @@
         console.log(state);
       } else {
         alert('Invalid state. Please enter a valid state name.');
-        return; // Prevent login if the state is invalid
+        return;
       }
     } else {
       alert('Please enter a state name.');
-      return; // Prevent login if the state is empty
+      return;
     }
 
     // Perform login logic here
     console.log('Logging in with:', username, password, state);
-    handleSuccessfulLogin(); // Assuming login is successful
+    handleSuccessfulLogin();
   };
-  
-  const handleSignup = () => {
-    // Perform signup logic here
+
+  const handleSignup = async () => {
+    // Validate the state input
     if (state !== '') {
       const validState = statesData.features.find(feature => feature.properties.name.toLowerCase() === state.toLowerCase());
       if (validState) {
         console.log(state);
       } else {
         alert('Invalid state. Please enter a valid state name.');
-        return; // Prevent login if the state is invalid
+        return;
       }
     } else {
       alert('Please enter a state name.');
-      return; // Prevent login if the state is empty
+      return;
     }
 
-    // Perform login logic here
-    console.log('Logging in with:', username, password, state);
-    handleSuccessfulLogin(); // Assuming login is successful
+    // Perform signup logic here
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password, state })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User signed up with ID:', data.id);
+        handleSuccessfulLogin();
+      } else {
+        const errorData = await response.json();
+        // @ts-ignore
+        alert('Error during sign up:', errorData.error);
+      }
+    } catch (error) {
+      console.error('Error during sign up:', error);
+    }
   };
-  
+
   const toggleMode = () => {
     isLogin = !isLogin;
   };
@@ -84,17 +99,14 @@
 
 <div>
   <Router>
-    <!-- Navbar always displayed -->
-    <Navbar/>
+    <Navbar />
     <Route path="/about" component={About} />
 
-    <!-- Conditional rendering of content -->
     {#if showContent}
-    <h2>Welcome, {username}!</h2>
+      <h2>Welcome, {username}!</h2>
       <button type="button" on:click={handleLogout}>Sign Out</button>
       <Voting state={state} />
-
-      <UsaMap/>
+      <UsaMap />
     {/if}
   </Router>
 </div>
@@ -107,17 +119,14 @@
         Username:
         <input class="form-input" type="text" bind:value={username} />
       </label>
-    
       <label class="form-label">
         Password:
         <input class="form-input" type="password" bind:value={password} />
       </label>
-      
       <label class="form-label">
         State:
         <input class="form-input" type="text" bind:value={state} />
       </label>
-    
       <button class="form-button" type="button" on:click={handleLogin}>Login</button>
       <p>Don't have an account? Sign up <a href="#/" on:click|preventDefault={toggleMode}>here</a>.</p>
     </form>
@@ -128,23 +137,19 @@
         Username:
         <input class="form-input" type="text" bind:value={username} />
       </label>
-    
       <label class="form-label">
         Password:
         <input class="form-input" type="password" bind:value={password} />
       </label>
-    
       <label class="form-label">
         State:
         <input class="form-input" type="text" bind:value={state} />
       </label>
-    
       <button class="form-button" type="button" on:click={handleSignup}>Sign Up</button>
       <p>Already have an account? Login <a href="#/" on:click|preventDefault={toggleMode}>here</a>.</p>
     </form>
   {/if}
 {/if}
-
 
 <style>
 /* Styles for login/sign-up forms */

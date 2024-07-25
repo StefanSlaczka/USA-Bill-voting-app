@@ -1,5 +1,5 @@
 const express = require('express');
-const { Pool } = require('pg');
+const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const dotenv = require('dotenv');
 
@@ -9,33 +9,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-// Example route to check if the server is running
-app.get('/', (req, res) => {
-  res.send('Backend is running');
-});
-
-// Endpoint to get a list of bills
-app.get('/api/bills', async (req, res) => {
-  const result = await pool.query('SELECT * FROM bills');
-  res.json(result.rows);
-});
-
-// Endpoint to vote for a bill
-app.post('/api/vote', async (req, res) => {
-  const { userId, billId, state, vote } = req.body;
-  try {
-    const result = await pool.query(
-      'INSERT INTO votes (user_id, bill_id, state, vote) VALUES ($1, $2, $3, $4) RETURNING *',
-      [userId, billId, state, vote]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+// Connect to SQLite database
+const db = new sqlite3.Database('./database.db', (err) => {
+  if (err) {
+    console.error('Error opening database ' + err.message);
+  } else {
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT,
+      password TEXT,
+      state TEXT
+    )`);
+    console.log('Connected to SQLite database.');
   }
+});
+
+// Endpoint to create a user
+app.post('/signup', (req, res) => {
+  const { username, password, state } = req.body;
+  const stmt = db.prepare('INSERT INTO users (username, password, state) VALUES (?, ?, ?)');
+  stmt.run(username, password, state, function (err) {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.status(200).send({ id: this.lastID });
+  });
+  stmt.finalize();
 });
 
 app.listen(process.env.PORT, () => {
