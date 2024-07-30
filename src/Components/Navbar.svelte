@@ -1,38 +1,43 @@
 <!-- Navbar.svelte -->
 <script>
-  import { Link } from "svelte-routing";
   import About from "./About.svelte";
+
+  export let isLoggedIn = false;
+  export let onLogout = () => {};
 </script>
 
-<div>
-  <nav class="navbar">
-    <div class="container">
-      <div class="navbar-brand">
-        <h4 class="navbar-item">Voting Bill App</h4>
-        <!-- Add any logo or branding here -->
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          
-            <Link to="/about" class="navbar-item"><button class="button">About</button></Link>
-            
-          </div>
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+      <h4 class="navbar-item">Voting Bill App</h4>
+      <!-- Add any logo or branding here -->
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a href="/about" class="navbar-item">About</a>
+        {#if isLoggedIn}
+          <a href="#/" class="navbar-item" on:click={onLogout}>Sign Out</a>
+        {:else}
+          <a href="/login" class="navbar-item">Log In</a>
+        {/if}
       </div>
     </div>
-  </nav>
-</div>
-
+  </div>
+</nav>
 <style>
   .navbar {
     background-color: #f0f0f0;
-    padding: 1rem 0;
+    padding: auto;
+    border-radius: 5%;
   }
 
   .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+    margin: 0 10% 0 10%;
+}
+
 
   .navbar-brand {
     display: flex;
@@ -60,23 +65,13 @@
     margin-right: 1rem;
     color: #333;
     text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   .navbar-item:hover {
     color: #555;
+    text-decoration: none !important;
   }
 
-  /* Style for the login button */
-  .button {
-    background-color: #E74C3C;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  .button:hover {
-    background-color: #0056b3;
-  }
 </style>

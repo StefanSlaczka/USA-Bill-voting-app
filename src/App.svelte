@@ -1,3 +1,4 @@
+<!-- App.svelte -->
 <script>
   import { Router, Route, navigate } from 'svelte-routing';
   import { onMount } from 'svelte';
@@ -5,13 +6,14 @@
   import Voting from './Components/Voting.svelte';
   import UsaMap from './Components/USAMap.svelte';
   import About from './Components/About.svelte';
-  import statesData from './statesData.js'; // Import the states data
+  import statesData from './statesData.js';
 
   let username = '';
   let password = '';
   let state = '';
-  let isLogin = true; // Determines whether the user is in the login or signup mode
-  let showContent = false; // Determines whether to show the content or login form
+  let isLogin = true;
+  let showContent = false;
+  let isLoggedIn = false;
 
   const handleLoginButtonClick = () => {
     showContent = true;
@@ -20,6 +22,7 @@
 
   const handleSuccessfulLogin = () => {
     showContent = true;
+    isLoggedIn = true;
   };
 
   onMount(() => {
@@ -27,76 +30,66 @@
   });
 
   const handleLogin = async () => {
-  // Perform login logic here
-  try {
-    const response = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password
-      }),
-    });
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
+      const result = await response.json();
+      console.log('User logged in:', result);
+      state = result.state;
+      handleSuccessfulLogin();
+    } catch (error) {
+      alert(`Login failed: ${error.message}`);
     }
-
-    const result = await response.json();
-    console.log('User logged in:', result);
-    state = result.state; // Set the state to the user's state
-    handleSuccessfulLogin();
-  } catch (error) {
-    alert(`Login failed: ${error.message}`);
-  }
-};
-
+  };
 
   const handleSignup = async () => {
-  // Validate the state input
-  if (state !== '') {
-    const validState = statesData.features.find(
-      feature => feature.properties.name.toLowerCase() === state.toLowerCase()
-    );
-    if (validState) {
-      console.log(state);
+    if (state !== '') {
+      const validState = statesData.features.find(
+        feature => feature.properties.name.toLowerCase() === state.toLowerCase()
+      );
+      if (validState) {
+        console.log(state);
+      } else {
+        alert('Invalid state. Please enter a valid state name.');
+        return;
+      }
     } else {
-      alert('Invalid state. Please enter a valid state name.');
-      return; // Prevent login if the state is invalid
-    }
-  } else {
-    alert('Please enter a state name.');
-    return; // Prevent login if the state is empty
-  }
-
-  try {
-    const response = await fetch('http://localhost:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password,
-        state,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      alert('Please enter a state name.');
+      return;
     }
 
-    const result = await response.json();
-    console.log('User signed up with ID:', result.id);
-    handleSuccessfulLogin(); // Assuming login is successful
-  } catch (error) {
-    alert(`Sign up failed: ${error.message}`);
-  }
-};
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, state }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
+      const result = await response.json();
+      console.log('User signed up with ID:', result.id);
+      handleSuccessfulLogin();
+    } catch (error) {
+      alert(`Sign up failed: ${error.message}`);
+    }
+  };
 
   const toggleMode = () => {
     isLogin = !isLogin;
@@ -107,17 +100,17 @@
     username = '';
     password = '';
     state = '';
+    isLoggedIn = false;
   };
 </script>
 
 <div>
   <Router>
-    <Navbar />
+    <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
     <Route path="/about" component={About} />
 
     {#if showContent}
-      <h2>Welcome, {username}!</h2>
-      <button type="button" on:click={handleLogout}>Sign Out</button>
+      <h2>Welcome, {username}</h2>
       <Voting state={state} />
       <UsaMap />
     {/if}
@@ -161,64 +154,63 @@
 {/if}
 
 <style>
-/* Styles for login/sign-up forms */
-.login-form,
-.signup-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  text-align: center; /* Center align the text */
-}
+  /* Styles for login/sign-up forms */
+  .login-form,
+  .signup-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
 
-.form-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center; /* Center align the text */
-}
+  .form-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
 
-.form-label {
-  display: block;
-  margin-bottom: 10px;
-}
+  .form-label {
+    display: block;
+    margin-bottom: 10px;
+  }
 
-.form-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
 
-.form-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  background-color: #E74C3C;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
+  .form-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #E74C3C;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
-.form-button:hover {
-  background-color: #eeb2ab;
-}
+  .form-button:hover {
+    background-color: #eeb2ab;
+  }
 
-.form-p {
-  margin-top: 10px;
-}
+  .form-p {
+    margin-top: 10px;
+  }
 
-.form-a {
-  color: #007bff;
-  text-decoration: none;
-}
+  .form-a {
+    color: #007bff;
+    text-decoration: none;
+  }
 
-.form-a:hover {
-  text-decoration: underline;
-}
-
+  .form-a:hover {
+    text-decoration: underline;
+  }
 </style>

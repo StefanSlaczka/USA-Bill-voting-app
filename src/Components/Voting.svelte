@@ -187,61 +187,68 @@
 </div>
 
 <style>
-.container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.left-section,
-.right-section {
-  flex: 1;
-}
-
-.outer_layer {
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  height: auto;
-}
-
-.button-container {
-  display: inline-block;
-  margin-right: 20px; /* Adjust the margin between buttons and counts */
-}
-
-.inner_layer {
-  margin-bottom: 10px;
-}
-
-.random_button {
-  display: block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.random_button:hover {
-  background-color: #0056b3;
-}
-
-.Pass,
-.Push {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.Pass:hover,
-.Push:hover {
-  background-color: #0056b3;
-}
-</style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+    margin-bottom: 2%;
+    width: 100%;
+  }
+  
+  .left-section,
+  .right-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .outer_layer {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    flex: 1; /* Make sure the content stretches to fill the available space */
+  }
+  
+  .button-container {
+    display: inline-block;
+    margin-right: 20px; /* Adjust the margin between buttons and counts */
+  }
+  
+  .inner_layer {
+    margin-bottom: 10px;
+  }
+  
+  .random_button {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .random_button:hover {
+    background-color: #0056b3;
+  }
+  
+  .Pass,
+  .Push {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .Pass:hover,
+  .Push:hover {
+    background-color: #0056b3;
+  }
+  </style>
+  
