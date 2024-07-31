@@ -1,4 +1,3 @@
-<!-- App.svelte -->
 <script>
   import { Router, Route, navigate } from 'svelte-routing';
   import { onMount } from 'svelte';
@@ -15,18 +14,67 @@
   let showContent = false;
   let isLoggedIn = false;
 
+  const setCookie = (name, value, days) => {
+    let expires = '';
+    if (days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days*24*60*60*1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  };
+
+  const getCookie = (name) => {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  };
+
+  const eraseCookie = (name) => {
+    document.cookie = name + '=; Max-Age=-99999999;';
+  };
+
   const handleLoginButtonClick = () => {
     showContent = true;
     navigate('/login');
   };
 
-  const handleSuccessfulLogin = () => {
+  const handleSuccessfulLogin = (token) => {
     showContent = true;
     isLoggedIn = true;
+    setCookie('token', token, 7); // Save token in cookies for 7 days
   };
 
   onMount(() => {
     window.scrollTo(0, 0);
+    const token = getCookie('token');
+    if (token) {
+      // Validate the token by sending it to the server
+      fetch('http://localhost:5000/validate-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.valid) {
+          username = result.username;
+          state = result.state;
+          handleSuccessfulLogin(token);
+        }
+      })
+      .catch(error => {
+        console.error('Token validation failed:', error);
+        handleLogout();
+      });
+    }
   });
 
   const handleLogin = async () => {
@@ -47,7 +95,7 @@
       const result = await response.json();
       console.log('User logged in:', result);
       state = result.state;
-      handleSuccessfulLogin();
+      handleSuccessfulLogin(result.token); // Pass the token
     } catch (error) {
       alert(`Login failed: ${error.message}`);
     }
@@ -85,7 +133,7 @@
 
       const result = await response.json();
       console.log('User signed up with ID:', result.id);
-      handleSuccessfulLogin();
+      handleSuccessfulLogin(result.token); // Pass the token
     } catch (error) {
       alert(`Sign up failed: ${error.message}`);
     }
@@ -101,6 +149,7 @@
     password = '';
     state = '';
     isLoggedIn = false;
+    eraseCookie('token'); // Clear the token
   };
 </script>
 

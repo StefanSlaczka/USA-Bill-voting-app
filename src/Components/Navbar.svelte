@@ -1,7 +1,4 @@
-<!-- Navbar.svelte -->
 <script>
-  import About from "./About.svelte";
-
   export let isLoggedIn = false;
   export let onLogout = () => {};
 </script>
@@ -24,6 +21,7 @@
     </div>
   </div>
 </nav>
+
 <style>
   .navbar {
     background-color: #f0f0f0;
