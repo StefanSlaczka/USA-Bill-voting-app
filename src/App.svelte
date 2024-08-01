@@ -5,6 +5,7 @@
   import Voting from './Components/Voting.svelte';
   import UsaMap from './Components/USAMap.svelte';
   import About from './Components/About.svelte';
+  import MoreInfo from './Components/MoreInfo.svelte';
   import statesData from './statesData.js';
 
   let username = '';
@@ -157,6 +158,7 @@
   <Router>
     <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
     <Route path="/about" component={About} />
+    <Route path="/more-info" component={MoreInfo} />
 
     {#if showContent}
       <h2>Welcome, {username}</h2>
